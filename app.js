@@ -4,6 +4,7 @@ const API_KEY = "422e21bdd1d866deee3cf5b15241194c";
 const searchInput = document.querySelector("input");
 const searchButton = document.querySelector("button");
 const weatherContainer = document.getElementById("weather");
+const locationIcon = document.getElementById("location");
 
 // get current weathers data url
 const getCurrentWeatherByName = async (city) => {
@@ -13,11 +14,17 @@ const getCurrentWeatherByName = async (city) => {
     return json;
 };
 
+// get weather data by coordinate
+const getCurrentWeatherByCoordinates = async (lat, lon) => {
+    const url = `${BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+    const response = await fetch(url);
+    const json = await response.json();
+    return json;
+};
+
 // show weather data in site (current weather)
 const renderCurrentWeather = (data) => {
-console.log(data)
-
-    // if (!data) return;
+    console.log(data);
     const weatherJSX = `
         <h1>${data.name}, ${data.sys.country}</h1>
         <div id="main">
@@ -31,7 +38,7 @@ console.log(data)
         </div>
     `;
 
-    weatherContainer.innerHTML = weatherJSX; 
+    weatherContainer.innerHTML = weatherJSX;
 };
 
 // get data by city name
@@ -41,9 +48,31 @@ const searchHandler = async () => {
     if (!cityName) {
         alert("please enter city name");
     }
-    
+
     const currentData = await getCurrentWeatherByName(cityName);
-    renderCurrentWeather(currentData)
+    renderCurrentWeather(currentData);
+};
+
+// user weather by them location
+const positionCallback = async (position) => {
+    const { latitude, longitude } = position.coords;
+    console.log(latitude, longitude);
+    const currentData = await getCurrentWeatherByCoordinates(latitude, longitude);
+    console.log(currentData);
+    renderCurrentWeather(currentData);
+};
+
+const errorCallback = (error) => {
+    console.log(error.message);
+};
+
+const locationHandler = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(positionCallback, errorCallback);
+    } else {
+        alert("your browser dose not support geolocation");
+    }
 };
 
 searchButton.addEventListener("click", searchHandler);
+locationIcon.addEventListener("click", locationHandler);
