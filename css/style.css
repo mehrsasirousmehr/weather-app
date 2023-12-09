@@ -22,7 +22,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 100px 0 180px;
+    padding: 100px 10px 180px;
     background: linear-gradient(13deg, var(--color-primary) 47%, var(--color-secondary) 100%);
     border-radius: 0 0 40px 40px;
     box-shadow: var(--color-secondary) 0px 20px 100px 0px;
@@ -122,6 +122,7 @@ body {
 #forecast div {
     width: 150px;
     padding: 20px 10px 30px;
+    margin-bottom: 40px;
     text-align: center;
     border-radius: 20px;
     box-shadow: var(--color-secondary) 0px 25px 80px -25px;
@@ -193,5 +194,21 @@ body {
     }
     100% {
         transform: rotate(360deg);
+    }
+}
+
+/* responsive */
+@media (max-width: 500px) {
+    #weather {
+        width: 95%;
+    }
+
+    #weather #info {
+        flex-direction: column;
+    }
+
+    #forecast {
+        width: 95%;
+        margin: auto;
     }
 }
