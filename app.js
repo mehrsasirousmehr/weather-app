@@ -1,4 +1,5 @@
 import getWeatherData from "./utils/httpReq.js";
+import { showModal, removeModal } from "./utils/modal.js";
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednsday", "Thursday", "Friday", "Saturday"];
 
@@ -7,6 +8,7 @@ const searchButton = document.querySelector("button");
 const weatherContainer = document.getElementById("weather");
 const forecastContainer = document.getElementById("forecast");
 const locationIcon = document.getElementById("location");
+const modalButton = document.getElementById("modal-button");
 
 // show weather data in site (current weather)
 const renderCurrentWeather = (data) => {
@@ -52,7 +54,8 @@ const searchHandler = async () => {
     const cityName = searchInput.value;
     searchInput.value = "";
     if (!cityName) {
-        alert("please enter city name");
+        showModal("pelese enter a city name babe:)");
+        return;
     }
 
     const currentData = await getWeatherData("current", cityName);
@@ -77,9 +80,10 @@ const locationHandler = () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(positionCallback, errorCallback);
     } else {
-        alert("your browser dose not support geolocation");
+        showModal("your browser dose not support geolocation");
     }
 };
 
 searchButton.addEventListener("click", searchHandler);
 locationIcon.addEventListener("click", locationHandler);
+modalButton.addEventListener("click", removeModal);
